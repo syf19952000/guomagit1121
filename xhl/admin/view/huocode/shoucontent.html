@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="UTF-8">
+		<title></title>
+	</head>
+   <link href="/tpl/default/tp32/css/icheck_skins/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/tpl/default/tp32/css/bootstrap-fileupload.css" />
+    
+    	<link rel="stylesheet" href="/tpl/default/tp32/css/tabs.css" />
+		<link rel="stylesheet" href="/tpl/default/tp32/css/layout.css" />
+		<link rel="stylesheet" href="/tpl/default/tp32/css/bootstrap.css" />
+		<link rel="stylesheet" href="/tpl/default/tp32/css/table.css"  />
+		<link rel="stylesheet" href="/tpl/default/tp32/css/font-awesome.css" />
+    <style>
+        .item_content ul {
+            list-style: none;
+        }
+
+            .item_content ul li {
+                width: 370px;
+                height: 430px;
+                float: left;
+                margin-right: 30px;
+            }
+    </style>
+    <script type="text/javascript">
+    function search()
+    {
+    	// alert("点击了");
+    	//var a = document.getElementById('key').innerHTML;
+    	var a = document.getElementById('key').value;  // 这样获取到了输入的内容
+    	// 那返回数据到页面咋加载的
+    	// SELECT * FROM user WHERE username LIKE 'l%'; 之后加载模板
+    	alert(a);
+    }
+
+    </script>
+	<body>
+			<ul class="tabs" style="background-color: #faf3f3">
+				<li class="current">
+					<a href="javascript:void(0)" id="#tab1">二维码表</a>
+				</li>
+				<li>
+					<!-- <a href="javascript:void(0)" id="#tab2">添加类型</a> -->
+				</li>
+			</ul>
+			<!-- 隐藏传递查询的uid,不对，是输入的uid,应该是获取输入的手机号 -->
+			<!-- 用form表单提交 -->
+			<form action="?huocode/ewmadmin-search" method="post">   
+			<div id="box">
+    			<input type="text" id="key"  name="key" placeholder="请输入关键字" /> 
+				<!-- <input type="button" value="搜索" onclick="search()"/>  -->
+				<button class="denglu">搜索</button>
+				<!-- <input type="button" value="搜索" />  -->
+			</div> 
+			</form>
+
+
+			<div class="tabs_content" style="">
+				<div id="tab1" style="display: block;">
+					<table id="tbRecord">
+						<thead>
+							<tr>
+								<th>ID</th>
+								<!-- <th style="display: none;">是否警用</th> -->
+								<th>type_id</th>
+								<th>status</th>
+								<th>time</th>
+								<th>对应uid</th>
+								<th>code_link</th>
+								<th>code</th>
+								<th>访问量</th>
+								<th>编辑</th>
+								<th>删除</th>
+							</tr>
+						</thead>
+						<tbody>
+							
+					    <{foreach $data as $v}>
+					  <!--   console.log("====="+$attr); -->
+                            <tr>
+                       			<td><{$v.id}></td>
+                				<td><{$v.type_id}></td>
+                				<td><{$v.status}></td>
+          						<td><{$v.time}></td>
+          						<!-- 传tid 在content表中查 -->
+          						<!-- <td><{$v.time}></td>	 -->
+                				<td><{$v.uid}></td>
+                				<td><{$v.code_link}></td>
+                				<td><{$v.code}></td>
+                				<td><{$v.num}></td>
+								<td class="td_column_edit" id="td_column_edit_1" align="center" style="cursor:pointer;"><button class="btn btn-primary"><i class="icon-edit" style="margin-right:3px"></i><a href="?huocode/ewmadmin-cc.html/edit_id?<{$v.tid}>">编辑</a></button></td>
+
+								<td class="td_column_delete" id="td_column_delete_1" align="center" style="cursor:pointer;"><button class="btn btn-danger"><i class="icon-trash" style="margin-right:3px"></i><a href="?huocode/ewmadmin-deletecode.html?<{$v.tid}>">删除</a></button></td>
+            				</tr>
+        			    <{/foreach}>
+
+						</tbody>
+						
+					</table>
+				</div>
+
+
+	<script type="text/javascript" src="/tpl/default/tp32/js/jquery-1.8.3.min.js"></script>
+		<script src="/tpl/default/tp32/js/bootstrap/bootstrap-fileupload.js"></script>
+ <script type="text/javascript" charset="utf-8" src="/tpl/default/tp32/js/kindeditor.js"></script>
+  <script type="text/javascript">
+    KE.show({
+        id : 'content',
+		resizeMode : 1,
+        cssPath : './index.css',
+        items : [
+        'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold', 'italic', 'underline',
+        'removeformat', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+        'insertunorderedlist', 'emoticons', 'image', 'link']
+    });
+  </script>
+		<script>
+			$(function() {
+				/*菜单设置*/
+				/*选项卡设置*/
+				$('.tabs a').click(function(e) {
+					e.preventDefault();
+					if($(this).closest("li").attr("class") == "current") {
+						return;
+					} else {
+						$(".tabs_content").find("[id^='tab']").hide();
+						$(".tabs li").attr("class", "");
+						$(this).parent().attr("class", "current");
+						$($(this).attr('id')).fadeIn();
+						if(tabSelect) {
+							tabSelect($(this));
+						}
+					}
+				});
+
+			})
+		</script>
+		</div>
+	</body>
+
+</html>

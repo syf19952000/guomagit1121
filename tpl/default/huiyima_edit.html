@@ -18,19 +18,20 @@
     <div class="box" style="padding:20px 25px;">
         <input type="hidden" name="data[tid]" value="<{$data.tid}>">
         <p>活码标题:</p>
-        <input type="text" name="data[title]" class="huoma_title" placeholder="请输入活码标题">
+        <input type="text" name="data[title]" class="huoma_title" value="<{$data.title}>" placeholder="请输入活码标题">
         <p>上传图片:</p>
         <div class="huoma_photo">
             <input id="biaoqianma_file" name="img" type="file" style="width:80px;height:80px;position: absolute;top: 10px;opacity: 0;">
-            <img src="/tpl/default/static/images/hm.png" alt="" style="height:80px;margin-top: 10px;border-radius: 5px;vertical-align: top;">
+            <!-- <img src="/tpl/default/static/images/hm.png" alt="" style="height:80px;margin-top: 10px;border-radius: 5px;vertical-align: top;"> -->
+            <img src="<{$data.img}>" alt="" style="height:80px;margin-top: 10px;border-radius: 5px;vertical-align: top;">
             <div class="huoma_photo_box">
             </div>
         </div>
         <p>记录回忆:</p>
-        <textarea name="data[content]" class="huoma_neirong" placeholder="请填写您要记录的故事"></textarea>
+        <textarea name="data[content]"  class="huoma_neirong" placeholder="请填写您要记录的故事"><{$data.content}></textarea>
     </div>
     <!-- <a href="ewm_information.html" class="next">下一步</a> -->
-    <button class="next">下一步</button>
+    <button class="next">保存</button>
     </form>
 </div>
 

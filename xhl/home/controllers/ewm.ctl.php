@@ -14,23 +14,60 @@ class Ctl_Ewm extends Ctl
 	//加载活码页面
     public function index()
     {
+       $data = $this->request['uri'];
+        $a = explode('=',$data);
+        $page = $a[1];
         $uid = $this->cookie->get('uid');
         if (!$uid) {
             $this->err->add('请先登录', 201);
         } else {
-            $data = K::M('code/content')->codeAll($uid);
+            $data2 = K::M('code/content')->codeAll($uid);
             $num = K::M('code/fangwen')->chaxun('uid', $uid);
             foreach ($num as $k=>$v) {
                 $nums[$v['code_id']] = $v;
             }
-            foreach ($data as $k=>&$v) {
+            foreach ($data2 as $k=>&$v) {
                 $v['num'] = $nums[$k]['num'];
             }
-            $this->pagedata['data'] = $data;
-
+            // 分页
+            $count = count($data2);  // 数据总条数
+            $pagenum = 1;
+            $pagesize = 3 ;         // 每页的数据数
+            $pagecount = ceil($count/$pagesize);    // 总页数 ,尾页
+            // 当$page = 0 的时候，$page应该加1，
+            $page2 = $page + 1;
+            //$start = ($page-1)*$pagesize;     // 计算每次分页的开始位置，当是第一页的时候，$page=1,当时第二页的时候，$page还是1
+            $start = ($page2-1)*$pagesize;  
+            $pagedata = array();
+            $pagedata = array_slice($data2,$start,$pagesize);  // 为什么总是重复几条数
+            $this->pagedata['pagecount'] = $pagecount-1;
+            $this->pagedata['page'] = $page;      
+            $this->pagedata['data'] = $pagedata;
             $this->tmpl = 'ewm.html';
         }
     }
+
+    // 没有做分页的时候
+    // public function index()
+    // {
+    //     $uid = $this->cookie->get('uid');
+    //     if (!$uid) {
+    //         $this->err->add('请先登录', 201);
+    //     } else {
+    //         $data = K::M('code/content')->codeAll($uid);
+    //         $num = K::M('code/fangwen')->chaxun('uid', $uid);
+    //         foreach ($num as $k=>$v) {
+    //             $nums[$v['code_id']] = $v;
+    //         }
+    //         foreach ($data as $k=>&$v) {
+    //             $v['num'] = $nums[$k]['num'];
+    //         }
+    //         //$data['count'] = count($data);
+    //         $this->pagedata['data'] = $data;
+    //         $this->tmpl = 'ewm.html';
+    //     }
+    // }
+
 
     //加载选择码类型页面
     public function code()
@@ -50,7 +87,7 @@ class Ctl_Ewm extends Ctl
         $data = $this->getlink(13);
         $arr = K::M('code/content')->cfg();
         $uid = $this->cookie->get('uid');
-        if (!$arr[$data['type']]) {
+        if (!$arr[$data['type']]) {         //这后期要改，因为后台删除type的话，id是不会清零 的增长
             $this->err->add('分类待完善', 201);
         } elseif ($uid) {
             $code = $data['code'];
@@ -95,7 +132,7 @@ class Ctl_Ewm extends Ctl
     {
         $data = $this->GP('data');
         
-        $dir = $_SERVER['DOCUMENT_ROOT'].'/static/imgs';
+        $dir = $_SERVER['DOCUMENT_ROOT'].'/static/imgs';    // 上传的文件夹
         if (!file_exists($dir)) {
             mkdir($dir);
         }
@@ -128,28 +165,38 @@ class Ctl_Ewm extends Ctl
     }
 
     //加载子表内容编辑页面
-    public function edit()
+    public function edit()      // 修改操作统一进这一方法 
     {
-        $id = $this->getlink(9);
+        $id = $this->getlink(9);    // $id['id'] 是content表中的id
         $arr = K::M('code/content')->cfg();
-        $data = K::m('code/bianqian')->chaxun('tid', $id['id']);
-        if (!$data) {
-            $data = K::m('code/huiyi')->chaxun('tid', $id['id']);
+        $arr1 = K::M('code/content')->chaxun('id', $id['id']);
+        foreach($arr1 as $v)
+        {
+            $type_id = $v['type_id'];
         }
-        // var_dump($data);die;
+        switch ($type_id) {
+            case '1':
+                $data = K::m('code/bianqian')->chaxun('tid', $id['id']);
+                break;
+            case '2':
+                $data = K::m('code/huiyi')->chaxun('tid', $id['id']);
+                break;
+            default:
+                # code...
+                break;
+        }
         foreach ($data as $v) {
             $data = $v;
         }
         if (empty($data)) {
             $data['tid'] = $id['id'];
         }
-        $v = K::M('code/content')->chaxun('id', $id['id']);
-        foreach ($v as $val) {
+        foreach ($arr1 as $val) {
             $vv = $val;
         }
-        $link = $arr[$val['type_id']];
+        //$link = $arr[$val['type_id']];      
+        $link = $arr[$vv['type_id']];
         $this->pagedata['data'] = $data;
-
         $this->tmpl = $link . '_edit.html';
     }
 
@@ -199,21 +246,20 @@ class Ctl_Ewm extends Ctl
     //删除二维码
     public function shanchu()
     {
-        
+        // 应该是content表和code表都进行删除
         $data = $_POST['a'];
         $shanchu = K::M('code/content')->shanchu($data);
         $returnData = json_encode($shanchu, JSON_UNESCAPED_UNICODE); 
-
         echo $returnData;
         exit;
     }
 
     //扫描二维码进入这个方法
-    public function moveCode()
+    public function moveCode()      
     {
         $data = $this->getlink(13);
-        $code = base64_decode($data['code']);
-        // $code = 'tvqG4u';   //先用假数据
+        $code = $data['code'];
+        //$code = base64_decode($data['code']);  // 线上的获取方法
         $data = K::M('code/content')->chaxun('code', $code);
         foreach ($data as $v) {
             $data = $v;
@@ -250,7 +296,7 @@ class Ctl_Ewm extends Ctl
         }
     } 
 
-    //加载便签详情页面
+    //加载便签详情页面，直接加载的时候进这个方法，不统计访问数量
     public function bianqian($code=0)
     {
         if (!$code) {
@@ -264,15 +310,24 @@ class Ctl_Ewm extends Ctl
         } else {
             foreach ($codeData as $v) {
                 $id = $v;
+                $type_id = $v['type_id'];
             }
-            $bianqian = K::M('code/bianqian')->chaxun('tid', $id['id']);
-            if (!$bianqian) {
-                $bianqian = K::M('code/huiyi')->chaxun('tid', $id['id']);
+            // 也可以把type_id的判断放到模型中判断，ewm中把type_id传到模型中
+            switch ($type_id) {
+                case '1':
+                    $bianqian = K::M('code/bianqian')->chaxun('tid', $id['id']);
+                    break;
+                case '2':
+                    $bianqian = K::M('code/huiyi')->chaxun('tid', $id['id']);
+                    break;
+                default:
+                    # code...
+                    break;
             }
             foreach ($bianqian as $v) {
                 $bianqianData = $v;
             }
-            $link = $arr[$id['type_id']];
+            $link = $arr[$id['type_id']];   // $id 是二维码表中的id
             $this->pagedata['data'] = $bianqianData;
             $this->pagedata['code'] = $id;
 

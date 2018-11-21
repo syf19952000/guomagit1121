@@ -47,7 +47,7 @@ class Ctl_User extends Ctl
             $access = $this->system->config->get('access');
             $session =K::M('system/session')->start();
             $scode =  $session->get('MOBILE_VERIFY_CODE');
-            if($gdh['regCode'] = $scode){
+            if($gdh['regCode'] = $scode){                   // 在这验证手机号是否存在
                 $member = K::M('member/member')->member($gdh['mobile'], 'mobile');
                 if ($member) {
                     $succ = K::M('member/account')->update_passwd($member['uid'], $gdh['passwd']);
@@ -73,7 +73,7 @@ class Ctl_User extends Ctl
         $this->err->add('退出登录成功',200);
     }
 
-    public function login()
+    public function login()     // 登录的时候访问
     {
         if(!$gdh = $this->GP('user')){
             $this->err->add('非法的数据提交', 212);
@@ -86,7 +86,7 @@ class Ctl_User extends Ctl
             // $a = K::M('verify/check')->mail($uname) ? 'mail' : 'uname';
             $a = 'mobile';
             if($member = $this->auth->login($uname, $passwd, $a, false,$keep)){
-                $this->err->add("{$member[uname]}，欢迎您回来!");
+                $this->err->add("{$member[mobile]}，欢迎您回来!");
                 $forward = K::M('helper/link')->mklink('index:index', array(), array(), 'base');
                 // var_dump($forward);
                 // die;
@@ -271,7 +271,7 @@ class Ctl_User extends Ctl
 
 
 
-    public function create()
+    public function create()    
     {
         if(!$gdh = $this->GP('gdh')){
             $this->err->add('非法的数据提交', 212);
@@ -287,7 +287,7 @@ class Ctl_User extends Ctl
             }
             if($verifycode_success){
                 if($uid = K::M('member/account')->create($gdh)){
-                    $this->err->add('恭喜您，注册会员成功');
+                    $this->err->add('恭喜您，注册会员成功');          // 在这之前提示登录名或密码不正确
 //                    $from_list = K::M('member/member')->from_list();
                     $forward = K::M('helper/link')->mklink('index:index', array(), array(), 'base');
                     $this->err->set_data('forward', $forward);

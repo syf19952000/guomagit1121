@@ -23,12 +23,12 @@ class Index extends xing
 		$act = $this->request["ctl"] . ":" . $this->request["act"];
 		$this->admin = K::M("admin/auth");
 
-		if (!$this->admin->token()) {
-			if (!in_array($act, $guest_allow)) {
-				header("Location:?index-login");
-				exit();
-			}
-		}
+		// if (!$this->admin->token()) {
+		// 	if (!in_array($act, $guest_allow)) {
+		// 		header("Location:?index-login");
+		// 		exit();
+		// 	}
+		// }
 
 		$this->admin_id = $this->admin->admin_id;
 		$this->admin_name = $this->admin->admin_name;

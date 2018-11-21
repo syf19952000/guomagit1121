@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>活码后台</title>
+    <link rel="stylesheet" href="/tpl/default/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/tpl/default/static/css/huoma.css">
+    <script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+    <script src="/tpl/default/static/js/bootstrap.js"></script>
+
+</head>
+<body class="login_bg">
+<div class="container">
+    <div class="login_box">
+        <div class="touxiang">
+            <img src="/tpl/default/static/images/hm.png" alt="">
+        </div>
+        <form action="?index-login" method="post">
+            <p class="pull-left">&nbsp;</p>
+            <p class="login_y">登陆成功，正在跳转...</p>
+            <p class="login_n">密码错误</p>
+            <input class="name shuru" type="text" name="admin_name" placeholder="请输入您的用户名">
+            <div style="position: relative;">
+                <input class="password shuru" type="password" name="admin_pwd" id="password" placeholder="请输入您的密码">
+                <span id="passwordeye" class="bukejian"></span>
+            </div>
+            <button class="denglu">后台登陆</button>
+        </form>
+        <p style="margin-top: 10px;">
+            <a href="user-xiugai"><span class="wangjimima">忘记密码</span></a>
+            <a href="user-zhuce"><span class="zhucezhanghao pull-right">注册账号</span></a>
+        </p>
+        <p style="text-align: center;color:#fff;margin-top: 50px;">—————— 更多登陆方式 ——————</p>
+        <ul class="qita">
+            <li>
+                <a href="" class="weixin"></a>
+            </li>
+            <li>
+                <a href="" class="qq"></a>
+            </li>
+            <li>
+                <a href="" class="weibo"></a>
+            </li>
+        </ul>
+    </div>
+</div>
+<footer>
+    <ul class="footnav">
+        <li class="nav-1 on"><a href="index.html"><i></i>首页</a></li>
+        <li class="nav-2 "><a href="ewm.html"><i></i>活码</a></li>
+        <li class="nav-3 "><a href="my.html"><i></i>我的</a></li>
+    </ul>
+</footer>
+<script src="/tpl/default/static/js/huoma.js"></script>
+</body>
+</html>

@@ -18,7 +18,8 @@
         <ul class="ewm_class">
             <{foreach $data as $v}>
             <li>
-                <a href="ewm-codeType?type=<{$v.id}>&code=<{$code}>"><{$v.tname}></a>
+                <!-- <a href="ewm-codeType?type=<{$v.id}>&code=<{$code}>"><{$v.tname}></a> -->
+                <a href="ewm-codeType?type=<{$v.id}>"><{$v.tname}></a>
             </li>
             <{/foreach}>
         </ul>
