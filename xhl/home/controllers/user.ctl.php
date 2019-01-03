@@ -322,7 +322,7 @@ class Ctl_User extends Ctl
                     $this->err->add('恭喜您，注册会员成功');          // 在这之前提示登录名或密码不正确
                 }
                 // 根据 $data['from'] 来跳转不同的页面，进行二次完善信息
-                // var_dump($gdh['from']);
+               
                 if($gdh['from'] == 'company')  
                 {
                     $forward = K::M('helper/link')->mklink('user:zhuce222', array(), array(), 'base');
@@ -341,8 +341,8 @@ class Ctl_User extends Ctl
     {
         echo '<pre>';
         // 可以接受到  ["checkbox"]=> string(7) "option2"
-        var_dump($this->GP('gdh'));
-        die;
+        // var_dump($this->GP('gdh'));
+        // die;
 
         if(!$gdh = $this->GP('gdh')){
             $this->err->add('非法的数据提交', 212);
@@ -358,8 +358,7 @@ class Ctl_User extends Ctl
             }
             if($verifycode_success){
                 if($uid = K::M('member/account')->create($gdh)){
-                    $this->err->add('恭喜您，注册会员成功');          // 在这之前提示登录名或密码不正确
-//                    $from_list = K::M('member/member')->from_list();
+                    $this->err->add('恭喜您，注册会员成功');          
                     $forward = K::M('helper/link')->mklink('index:index', array(), array(), 'base');
                     $this->err->set_data('forward', $forward);
                 }
