@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>活码</title>
+    <link rel="stylesheet" href="/tpl/default/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/tpl/default/static/css/huoma.css">
+    <script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+    <script src="/tpl/default/static/js/bootstrap.js"></script>
+    <!-- 应该是一些栏目清单 一张需求表，来实现增删改查-->
+</head>
+<section class="rt_wrap content mCustomScrollbar">
+ <div class="rt_content">
+      <div class="page_title">
+       <h2 class="fl">分类列表</h2>
+       <a href="user_detail.html" class="fr top_rt_btn add_icon">添加新分类</a>
+      </div>
+
+      <form action="ewm-xuqiu_add" method="post">
+
+             请选择父级分类：<select name="pid" size="20">
+
+             <option value="0">根分类</option>
+             <!-- <{$data.tid}> -->
+             <{foreach $alist as $v}>
+
+               <option value="<{$v['id']}>">
+               <{$v['count']-2}>
+               <{$v['name']}>
+               </option>
+              <{/foreach}>
+           
+
+             </select><br />
+
+             新的分类名称：<input type="text" name="name" /><br />
+
+             <input type="submit" value="添加分类" />
+
+      </form>
+
+     
+ </div>
+</section>
+</body>
+</html>

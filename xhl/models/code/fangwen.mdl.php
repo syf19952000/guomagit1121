@@ -47,7 +47,7 @@ class Mdl_Code_Fangwen extends Mdl_Table
         }
         $where = $key . ' = "'. $val . '"';
         $sql = "SELECT * FROM " . $this->table($this->_table) . " where " . $where;
-        // var_dump($sql);
+        //var_dump($sql);
         if($rs = $this->db->Execute($sql)){
             while($row = $rs->fetch()){
                 $items[$row[$this->_pk]] = $row;

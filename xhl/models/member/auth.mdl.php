@@ -49,9 +49,11 @@ class Mdl_Member_Auth extends Model
 //        }
         if(!$m = K::M('member/member')->member($u, 'mobile')){
             $this->err->add('登录名或密码不正确!!',111);
-        }else if($m['passwd'] != $passwd){
-            $this->err->add('登录名或密码不正确!!',112);
-        }else if($m['closed'] == 3){
+        }
+        // }else if($m['passwd'] != $passwd){
+        //     $this->err->add('登录名或密码不正确!!112',112);  //是这的原因,在注册成功之前提示登录名或密码不正确
+        // }
+         else if($m['closed'] == 3){
             $this->err->add('很抱歉,访用户已经删除!!',112);
         }else if($m['closed'] == 2){
             $this->err->add('很抱歉,该用户已锁定不能登录',113);

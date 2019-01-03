@@ -38,7 +38,38 @@ class Mdl_Code_Type extends Mdl_Table
         }
         return true;
     }
+
+    public function delete($data)
+    {
+       $sql = "DELETE FROM ".$this->table($this->_table)." WHERE id = ".$data;
+       return $this->db->Execute($sql);
+    }
 	
+   
+    public function deletetype2($data)
+    {
+         if (!$data) {
+            $returnData = ['code'=>1, 'info'=>'数据错误'];
+        } else {
+            $data = $this->chaxun('id',$data);
+            if ($data) {
+                foreach ($data as $v) {
+                    $data = $v;
+                }
+                $succ = $this->update($v['id'], ['status'=>0], 1);
+                if ($succ) {
+                    $returnData = ['code'=>3, 'info'=>'删除成功'];
+                } else {
+                    $returnData = ['code'=>4, 'info'=>'删除失败'];
+                }
+            } else {
+                $returnData = ['code'=>2, 'info'=>'二维码不存在'];
+            }
+        }
+        
+        return $returnData;
+    }
+
     //查询 $key:字段  $val:值
     public function chaxun($key, $val)
     {

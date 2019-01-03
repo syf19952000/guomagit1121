@@ -18,7 +18,9 @@ function switchPwd() {
 
 // 上传图片并展示
 document.getElementById('biaoqianma_file').onchange = function() {
+    // alert(点击了);
     var imgFile = this.files[0];
+    // alert(a);
     var fr = new FileReader();
     fr.onload = function() {
         // alert(fr.result);

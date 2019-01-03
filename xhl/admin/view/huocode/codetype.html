@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title></title>
+   
+   <link href="/tpl/default/tp32/css/icheck_skins/all.css" rel="stylesheet" />
+    <link rel="stylesheet" href="/tpl/default/tp32/css/bootstrap-fileupload.css" />
+    
+        <link rel="stylesheet" href="/tpl/default/tp32/css/tabs.css" />
+        <link rel="stylesheet" href="/tpl/default/tp32/css/layout.css" />
+        <link rel="stylesheet" href="/tpl/default/tp32/css/table.css"  />
+        <link rel="stylesheet" href="/tpl/default/tp32/css/font-awesome.css" />
+
+        
+        <link rel="stylesheet" href="/tpl/default/static/css/huoma.css">
+        <script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+        <script src="/tpl/default/static/js/bootstrap.js"></script>
+        <link rel="stylesheet" href="/tpl/default/static/css/bootstrap.css">
+        <script src="/tpl/default/static/js/huoma.js"></script>
+
+ <script type="text/javascript" charset="utf-8" src="/tpl/default/tp32/js/kindeditor.js"></script>
+
+    <style>
+        .item_content ul {
+            list-style: none;
+        }
+
+            .item_content ul li {
+                width: 370px;
+                height: 430px;
+                float: left;
+                margin-right: 30px;
+            }
+    </style>
+    
+    </head>
+    <body>
+            <ul class="tabs" style="background-color: #faf3f3">
+                <li class="current">
+                    <a href="javascript:void(0)" id="#tab1">活码类型管理</a>
+                </li>
+                <li>
+                    <a href="javascript:void(0)" id="#tab2">添加类型</a>
+                </li>
+            </ul>
+            <div class="tabs_content" style="">
+                <div id="tab1" style="display: block;">
+                    <table id="tbRecord">
+                        <thead>
+                            <tr>
+                                <th>活码标题</th>
+                                <!-- <th style="display: none;">是否警用</th> -->
+                                <th>活码状态</th>
+                                <!-- <th>发布时间</th> -->
+                                <!-- <th>编辑</th> -->
+                                <th>删除</th>
+                            </tr>
+                        </thead>
+                        
+         
+                        <{foreach $attr as $v}>
+                        <tbody>
+                      <!--   console.log("====="+$attr); -->
+                            <tr>
+                                <td><{$v.tname}></td>
+                                <td><{$v.status}></td>
+                                <!-- ajax修改状态 -->
+                              <!--   <td><input type='button'  id="shanchu" code="<{$v.id}>" value='删除'/></td> -->
+                                <!-- 下面执行真正的删除 -->
+                                <td id="deletetype" class="td_column_delete" id="td_column_delete_1" align="center" style="cursor:pointer;"><button class="btn btn-danger"><i class="icon-trash" style="margin-right:3px"></i><a href="?huocode/ewmadmin-deletetype.html?<{$v.id}>">删除</a></button></td>
+                            </tr>
+                        </tbody>
+                            
+                        <{/foreach}>   
+                    </table>
+                 </div>
+            </div>
+
+
+
+                <div id="tab2" style="display: none; ">
+                    <div class="item_container" style="">
+                        <div class="item_content" style="overflow: auto; padding: 0px;">
+                            <form action="?huocode/ewmadmin-addtype.html" enctype="multipart/form-data" method="post" novalidate="novalidate" style="">
+                                <fieldset style="">
+                                    <legend></legend>
+                                    <div class="control-group">
+                                        <!-- Text input-->
+                                        <label class="control-label" for="input01">
+                                活码标题</label>
+                                        <div class="controls">
+                                            <input class="input-xlarge" data-val="true" data-val-required="活码标题不能为空" id="tname" name="data[tname]" placeholder="活码标题" type="text" value="" autocomplete="Off">
+                                            <span class="field-validation-valid" data-valmsg-for="ArticleName" data-valmsg-replace="true"></span>
+
+                                        </div>
+                                    </div>
+                                    <!-- <div class="control-group"> -->
+                                        <!-- Text input-->
+                                        <label class="control-label" for="input01">
+                                活码图片</label>
+                                        <div class="huoma_photo">
+                                            <input id="biaoqianma_file" name="img" type="file" style="width:80px;height:80px;position: absolute;top: 10px;opacity: 0;">
+                                            <img src="/tpl/default/static/images/hm.png" alt="" style="height:80px;margin-top: 10px;border-radius: 5px;vertical-align: top;">
+                                            <div class="huoma_photo_box"> 
+                                            </div>
+                                        </div>
+                                    <!-- </div> -->
+
+                                    <!-- <div class="control-group">
+                                         Text input-->
+                                        <!-- <label class="control-label" for="input01">
+                                活码简介</label>
+                                        <div class="controls">
+                                            <textarea cols="20" data-val="true" data-val-required="活码简介不能为空" id="ArticleIntroduce" name="ArticleIntroduce" rows="2" style="width:800px;height:300px;"></textarea>
+                                        </div>
+                                    </div> --> 
+    <div class="control-group">
+                                        <!-- Text input-->
+                                        <label class="control-label" for="input01">
+                                活码内容</label>
+                                        <div class="controls">
+                                            <textarea cols="20" id="content" data-val="true" data-val-required="活码内容" id="ArticleIntroduce2" name="ArticleIntroduce2" rows="2" style="width:800px;height:300px;"></textarea>
+                                        </div>
+                                    </div>
+
+                                    <div class="control-group" id="machine" style="margin-top: 30px; margin-bottom: 20px; width: 800px; display: none; overflow: auto; margin-left: 30px;">
+                                        <div style="float: left; width: 180px; margin-bottom: 18px; overflow: auto;">
+                                            <div style="float: left; margin-right: 5px;">
+                                                <div class="icheckbox_flat-blue checked" style="position: relative;"><input type="checkbox" checked="checked" class="chk1" value="1" name="machineId" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>
+                                            </div>
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                    <div style="clear: both; margin-top: 30px;">
+                                        <!-- <input type="button" name="submit" value="提交" class="btn btn-primary"> -->
+                                        <button type="submit" >提交</button>
+                                    </div>
+                                </fieldset>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+    
+  <script type="text/javascript">
+    KE.show({
+        id : 'content',
+        resizeMode : 1,
+        cssPath : './index.css',
+        items : [
+        'fontname', 'fontsize', 'textcolor', 'bgcolor', 'bold', 'italic', 'underline',
+        'removeformat', 'justifyleft', 'justifycenter', 'justifyright', 'insertorderedlist',
+        'insertunorderedlist', 'emoticons', 'image', 'link']
+    });
+  </script>
+        <script>
+            $(function() {
+                /*菜单设置*/
+                /*选项卡设置*/
+                $('.tabs a').click(function(e) {
+                    e.preventDefault();
+                    if($(this).closest("li").attr("class") == "current") {
+                        return;
+                    } else {
+                        $(".tabs_content").find("[id^='tab']").hide();
+                        $(".tabs li").attr("class", "");
+                        $(this).parent().attr("class", "current");
+                        $($(this).attr('id')).fadeIn();
+                        if(tabSelect) {
+                            tabSelect($(this));
+                        }
+                    }
+                });
+
+            })
+        </script>
+
+
+
+    </body>
+
+</html>
+
+    <script type="text/javascript">
+
+        $("#shanchu").click(function(){
+            var a = $(this).attr('code');
+            alert(a);
+            $.ajax({
+                //url:'./ewm-shanchu',
+                url:'?huocode/ewmadmin-deletetype2',
+                type:'POST',
+                data:{
+                    a : a
+                },
+                dataType:'json',
+                success:function(data){
+                    alert(data.info);
+                    // if(data.code == '3'){
+                    //     b.hide();
+                    // }
+                },
+                error:function(msg){
+                    // alert(msg);
+                    console.log(msg);
+                }
+            })  
+        })
+
+     
+      
+ 
+    </script>
+
+    
+  

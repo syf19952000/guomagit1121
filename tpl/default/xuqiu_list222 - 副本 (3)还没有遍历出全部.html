@@ -1,0 +1,747 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="author" content="56gee 39℃" />
+<meta name="ComeFrom" content="www.56gee.com" />
+<script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+<script src="/tpl/default/static/js/bootstrap.js"></script>
+
+<title>Jquery实现无限极树状结构并动态添加增删改等编辑功能——56gee</title>
+<style type="text/css">
+div, ul, li {
+  margin: 0px;
+  padding: 0px;
+  list-style-type: none;
+}
+
+body {
+  background-color: #FFFFFF;
+  font-size: 12px;
+  margin: 0px;
+  padding: 0px;
+}
+
+#TreeList {
+  background-color: #FFFFFF;
+  margin-top: 6px;
+  margin-right: auto;
+  margin-bottom: 6px;
+  margin-left: auto;
+  border: 1px solid #5d7b96;
+  padding-bottom: 6px;
+  padding-left: 6px;
+  width: 680px;
+}
+#TreeList .mouseOver {
+  background-color: #FAF3E2;
+}
+
+#TreeList .ParentNode {
+  line-height: 21px;
+  height: 21px;
+  margin-top: 2px;
+  clear: both;
+}
+
+#TreeList .ChildNode {
+  background-image: url(../demoImgs/Sys_ModuleIcos.png);
+  background-position: 15px -58px;
+  padding-left: 39px;
+  line-height: 21px;
+  background-repeat: no-repeat;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 1px;
+  border-left-width: 0px;
+  border-top-style: dashed;
+  border-right-style: dashed;
+  border-bottom-style: dashed;
+  border-left-style: dashed;
+  border-top-color: #aabdce;
+  border-right-color: #aabdce;
+  border-bottom-color: #aabdce;
+  border-left-color: #aabdce;
+  cursor: default;
+  clear: both;
+  height: 21px;
+  color: #314f6a;
+}
+
+#TreeList .title {
+  float: left;
+}
+#TreeList .input {
+  font-size: 12px;
+  line-height: 18px;
+  color: #FFF;
+  height: 16px;
+  background-color: #3F6B8F;
+  width: 120px;
+  text-align: center;
+  margin-top: 1px;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #1F3547;
+  border-right-color: #FFF;
+  border-bottom-color: #FFF;
+  border-left-color: #1F3547;
+  float: left;
+}
+#TreeList .editBT {
+  float: left;
+  overflow: visible;
+}
+#TreeList .editBT .ok {
+  /*/tpl/default/static/js/bootstrap.js"*/
+  /*background-image: url(/tpl/default/static/images/bzzx.png);*/
+
+  background-image: url(../demoImgs/Sys_ModuleIcos.png);
+  background-repeat: no-repeat;
+  background-position: 0px -89px;
+  height: 13px;
+  width: 12px;
+  float: left;
+  margin-left: 3px;
+  padding: 0px;
+  margin-top: 3px;
+  cursor: pointer;
+}
+#TreeList .editBT .cannel {
+  background-image: url(../demoImgs/Sys_ModuleIcos.png);
+  background-repeat: no-repeat;
+  background-position: 0px -120px;
+  float: left;
+  height: 13px;
+  width: 12px;
+  margin-left: 3px;
+  padding: 0px;
+  margin-top: 3px;
+  cursor: pointer;
+}
+
+#TreeList .editArea {
+  float: right;
+  color: #C3C3C3;
+  cursor: pointer;
+  margin-right: 6px;
+}
+
+#TreeList .editArea span {
+  margin: 2px;
+}
+
+#TreeList .editArea .mouseOver {
+  color: #BD4B00;
+  border-top-width: 1px;
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #C9925A;
+  border-right-color: #E6CFBB;
+  border-bottom-color: #E6CFBB;
+  border-left-color: #C9925A;
+  background-color: #FFFFFF;
+  margin: 0px;
+  padding: 1px;
+}
+
+#TreeList .ParentNode .title {
+  color: #314f6a;
+  cursor: pointer;
+  background-image: url(../demoImgs/Sys_ModuleIcos.png);
+  background-repeat: no-repeat;
+  padding-left: 39px;
+}
+
+#TreeList .ParentNode.show .title {
+  font-weight: bold;
+  background-position: 3px -27px;
+}
+
+#TreeList .ParentNode.hidden .title {
+  background-position: 3px 4px;
+}
+
+#TreeList .ParentNode .editArea {
+  color: #999;  
+}
+#TreeList .ParentNode.show {
+  background-color: #d1dfeb;
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 1px;
+  border-left-width: 1px;
+  border-top-style: solid;
+  border-right-style: solid;
+  border-bottom-style: solid;
+  border-left-style: solid;
+  border-top-color: #5d7b96;
+  border-right-color: #5d7b96;
+  border-bottom-color: #5d7b96;
+  border-left-color: #5d7b96;
+}
+
+#TreeList .ParentNode.hidden {
+  border-top-width: 0px;
+  border-right-width: 0px;
+  border-bottom-width: 1px;
+  border-left-width: 0px;
+  border-top-style: dashed;
+  border-right-style: dashed;
+  border-bottom-style: dashed;
+  border-left-style: dashed;
+  border-top-color: #aabdce;
+  border-right-color: #aabdce;
+  border-bottom-color: #aabdce;
+  border-left-color: #aabdce;
+}
+
+#TreeList .Row {
+  clear: both;
+  margin-left: 24px;
+  background-image: url(../demoImgs/Sys_ModuleIcos2.png);
+  background-repeat: repeat-y;
+  background-position: 7px 0px;
+}
+</style>
+
+
+<link href="/DemoShow/styles/public.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<div id="TopAD"></div>
+<div id="TopADCode" style="display:none">
+  <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "772619";</script>
+  <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+</div>
+<script type="text/javascript">
+if(document.getElementById('TopAD')!=null){
+  document.getElementById('TopAD').innerHTML = '<div class="SearchEngine_AD1">' + document.getElementById('TopADCode').innerHTML + '</div>';
+}
+</script>
+<div id="AD_B"></div>
+<div id="TreeList">
+
+
+ <{foreach $commlist as $data}>
+
+  <{foreach $data.children as $child}>
+    <div class="ParentNode hidden">
+      111<div class="title" id="dataid" data_id="<{$child.id}>"><{$child.name}></div>
+      <div class="editBT"></div>
+      <div class="editArea" id="<{$child.id}>"><span>[编辑]</span><span>[添加同级目录]</span><span>[添加下级目录]</span><span>[<{$child.id}>删除]</span></div>
+    </div>
+    <{foreach $child.children as $grandson}>
+    <div class="Row" style="display:none">
+    <!-- <{foreach $child.children as $grandson}> -->
+      <div class="ParentNode">
+       222 <div class="title" id="dataid" data_id="<{$grandson.id}>"><{$grandson.name}></div>
+        <div class="editBT"></div>
+        <div class="editArea" id="<{$grandson.id}>"><span >[编辑]</span><span>[添加同级目录]</span><span>[添加下级目录]</span><span>[<{$grandson.id}>删除]</span></div>
+      </div>
+
+       <{foreach $grandson.children as $grandsonson}>
+            <div class="Row" style="display:none">
+              <div class="ChildNode">
+             333   <div class="title" id="dataid" data_id="<{$grandsonson.id}>"><{$grandsonson.name}></div>
+                <div class="editBT"></div>
+              <div class="editArea" id="<{$grandsonson.id}>"><span>[编辑]</span><span>[添加同级目录]</span><span>[添加下级目录]</span><span>[<{$grandsonson.id}>删除]</span></div>
+              </div> 
+            </div>
+        <{/foreach}>
+      <!-- <{/foreach}> -->
+    </div>
+    <!-- 最后一个模块就没了 ，刷新页面的时候模块名闪一下-->
+<{/foreach}>
+
+<{/foreach}>
+
+<{/foreach}>
+
+
+  </div>
+
+
+<div id="AD_T"></div>
+<div id="ADCode_B" style="display:none">
+  <script src="/js/sogouad/AD_468-15.js" type="text/javascript"></script>
+  <script language='JavaScript' type='text/javascript' src='http://images.sohu.com/cs/jsfile/js/l.js'></script>
+</div>
+
+<div id="ADCode_T" style="display:none">
+  <script type="text/javascript" >BAIDU_CLB_SLOT_ID = "772426";</script>
+  <script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+</div>
+<script type="text/javascript" >BAIDU_CLB_SLOT_ID = "772399";</script>
+<script type="text/javascript" src="http://cbjs.baidu.com/js/o.js"></script>
+<script type="text/javascript" src="/js/ad_alliance/ad_alliance.js"></script>
+
+</body>
+</html>
+
+
+<script type="text/javascript" src="/js/jquery-1.5.min.js"></script>
+<script type="text/javascript">
+
+
+$(document).ready(function(e) {
+  var TreeName = 'TreeList';//树状ID
+  var PrentNodeClass = 'ParentNode';//父节点的标识
+  var ChildNodeClass = 'ChildNode';//没有下级子节点的标识
+  var ChildrenListClass = 'Row';//子节点被包着的外层样式
+  var NewNodeName = '新建目录';//默认新建节点的名称
+  var Orititle = 'Temptitle';//保存原来名称的属性名称
+  
+  var TModuleNode,TChildNode,TModuleNodeName;
+  TModuleNode = $('#TreeList .'+PrentNodeClass);//顶层节点
+  TChildNode = $('.'+ChildNodeClass);
+  TModuleNodeName = $('#TreeList .' + PrentNodeClass + ' .title');//顶层节点名称
+  TModuleNode.removeClass('show').addClass('hidden');
+  if(TModuleNode.next().hasClass(ChildrenListClass)){
+    TModuleNode.next().css('display','none');//紧跟的下一个是子节点
+  }
+  
+  //========================编辑区域的HTML源码==============================
+  function EditHTML(NewName){
+    var str = '<div class="title">' + NewName + '</div>';
+    str += '<div class="editBT"></div>';
+    str += '<div class="editArea"><span>[编辑]</span><span>[添加同级目录]</span><span>[添加下级目录]</span><span>[删除]</span></div>';
+    return str;
+  } 
+  
+  //==========================树状展开收缩的效果============================
+  TModuleNodeName.click(function(){
+    TModuleNodeName_Click($(this));
+  });
+  
+  //-------------------------------(定义)----------------------------------
+  function TModuleNodeName_Click(Obj){
+    if(Obj.has('input').length==0){     //非编辑模式下进行
+      var tempNode = Obj.parent();
+      if(tempNode.hasClass('hidden')){
+        tempNode.removeClass('hidden').addClass('show');
+        if(tempNode.next().hasClass(ChildrenListClass)){
+        tempNode.next().css('display','');
+        }
+      }
+      else{
+        tempNode.removeClass('show').addClass('hidden');
+        if(tempNode.next().hasClass(ChildrenListClass)){
+          tempNode.next().css('display','none');
+        }
+      }
+    }
+  } 
+  //==========================鼠标经过、离开节点的效果============================  
+  with(TModuleNode){
+    mouseover(function(){
+    TNode_MouseOver($(this));
+    });
+    
+    mouseout(function(){
+    TNode_MouseOut($(this));
+    });
+  }
+  
+  with(TChildNode){
+    mouseover(function(){
+    TNode_MouseOver($(this));
+    });
+    
+    mouseout(function(){
+    TNode_MouseOut($(this));
+    });
+  }
+  
+  //-------------------------------(定义)----------------------------------
+  function TNode_MouseOver(Obj){
+    if(!(Obj.hasClass('show'))){
+      Obj.addClass('mouseOver');
+    }
+  }
+  
+  function TNode_MouseOut(Obj){
+    Obj.removeClass('mouseOver');
+  }
+    
+  //==========================编辑区操作============================ 
+  $('.editArea').each(function(){
+    EditArea_Event($(this));
+  });
+  //-------------------------------(定义)----------------------------------
+  function EditArea_Event(Obj){    //Obj这个是当前编辑的对象 <input type="text" class="input" value="测试模块">
+    var objParent = Obj.parent();   //<input type="text" class="input" value="测试模块">它的父标签是什么  
+    //<div class="title" data_id="<{$grandson.id}>"><{$grandson.name}></div>
+    var objTitle = objParent.find('.title');//节点名称
+
+     //-----------------编辑区的鼠标效果------------------ 
+    Obj.children().each(function(){
+      with($(this)){
+        mouseover(function(){
+        $(this).addClass('mouseOver');
+        });
+        mouseout(function(){
+        $(this).removeClass('mouseOver');
+        });
+      }
+    });
+     //--------------------第一步，判断是哪个操作----------------------------- 
+    Obj.children().each(function(index, element) {
+      $(this).click(function(){
+      
+       // index 是数字，element 是对应的html元素
+        if($('#TreeList').has('input').length==0){
+        switch(index){
+          case 0: EditNode(objTitle,objTitle.html());break;//编辑
+          case 1: AddNode(0,objParent,NewNodeRename(0,objTitle));break;//添加同级目录
+          case 2: AddNode(1,objParent,NewNodeRename(1,objTitle));break;//添加下级目录
+          case 3: DelNode(objParent);break;//删除
+        }
+        }
+        else{
+        alert('请先取消编辑状态！'); 
+        }
+      });
+    });
+  }
+  //************************************************************************************************************
+  //************************************************************************************************************
+  
+  //===============================验证编辑结果================================
+  function CheckEdititon(pNode,text){
+    var SameLevelTags = new Array(PrentNodeClass,ChildNodeClass);
+    var SameLevelTag  = '';
+    for(var i=0;i<SameLevelTags.length;i++){
+      if(pNode.parent().attr('class').indexOf(SameLevelTags[i]) > -1){
+        SameLevelTag = SameLevelTags[i];
+        break;
+      }
+    }
+    if(SameLevelTag!=''){
+      if(text!=''){
+      //---------------- 根据节点样式遍历同级节点 --------------------
+      var IsExsit = false;
+      pNode.parent().parent().children('div').children('.title').each(function(){
+        if(pNode.find('input').val()==$(this).html()){
+          IsExsit = true;
+          alert('抱歉！同级已有相同名称！');
+          return false;
+        }
+      });
+      return !IsExsit;
+      }
+      
+      else{
+        alert('不能为空!');
+        return false;
+      }
+    }
+  }
+  
+  //=================================自动命名================================
+  function NewNodeRename(tag,pNode){
+    //---------------- 根据节点样式遍历同级节点 --------------------
+    var MaxNum = 0;
+    var TObj;
+    if(tag==0){//添加同级目录
+      if(pNode.attr('id')==TreeName){
+        TObj = pNode.children('div').children('.title');
+      }
+      else{
+        TObj = pNode.parent().parent().children('div').children('.title');  // 同一级
+      }
+    }
+    else{//添加下级目录
+      if(pNode.parent().next().html()!=null){//原来已有子节点
+        TObj = pNode.parent().next().children('div').children('.title');    // 为啥这就是下一级next()
+      }
+      else{//没有子节点
+        TObj = null;
+      }
+    }
+    
+    if(TObj){
+      TObj.each(function(){
+        var CurrStr = $(this).html();   // 同级的模块名称
+        var temp;
+    
+        if(CurrStr.indexOf(NewNodeName)>-1){
+          temp = parseInt(CurrStr.replace(NewNodeName,''));
+          if(!isNaN(temp)){
+            if(!(temp<MaxNum)){
+              MaxNum = temp + 1;
+            }
+          }
+          else{
+          MaxNum = 1;  
+          }
+        }
+      });
+    }
+    var dataid =TObj.attr('data_id');   // 取的点击添加同级目录时，同一结构的第一个div的id
+    // console.log(dataid);
+      
+    var TempNewNodeName = NewNodeName;
+    if(MaxNum>0){
+      TempNewNodeName += MaxNum;
+    }
+    var array = TempNewNodeName+'=='+dataid;
+    // alert(TempNewNodeName);
+    // return TempNewNodeName;    // 新建目录名称
+    return array;    // 新建目录名称加id
+
+  }
+  
+  //=============================== 第二步是确定编辑还是取消  编辑定义 ================================
+  function EditNode(obj,text){
+
+     // alert(obj.attr('data_id'));  // 得到id
+
+    obj.attr(Orititle,text);//将原来的text保存到Orititle中,         text是原来模块操作的名字
+    obj.html("<input type='text' class=input value=" + text + ">"); //切换成编辑模式
+    obj.parent().find('.editBT').html("<div class=ok title=确定></div><div class=cannel title=取消></div>");
+    obj.has('input').children().first().focusEnd();//聚焦到编辑框内
+
+  // 点击确定点击取消，触发的操作
+    obj.parent().find('.ok').click(function(){
+      Edit_OK(obj); 
+    });
+    
+    obj.parent().find('.cannel').click(function(){
+      Edit_Cannel(obj);
+    });
+  }
+  
+  //=============================== 添加节点 目录================================
+  function AddNode(tag,obj,NameStr){
+
+    arr = NameStr.split("==");
+    NameStr = arr[0];       // 这就是 自动命名的  新建目录，我要获取输入的目录名
+    id = arr[1];            // 我获取的是同一级的第一个id
+    // console.log(arr);
+    // console.log(NameStr);
+    // console.log(id);
+
+    if(tag==0 || tag==1){
+      var newNode = $('<div class=' + ChildNodeClass + '></div>');
+
+      if(tag==0){ //添加同级目录
+
+        newNode.appendTo(obj.parent());
+      }
+      else{     //添加下级目录
+
+        if(!(obj.next()) || (obj.next().attr('class')!=ChildrenListClass)){//最后一个节点和class!=ChildrenListClass都表示没有子节点
+          var ChildrenList = $('<div class=' + ChildrenListClass + '></div>');
+          ChildrenList.insertAfter(obj);//将子节点的”外壳“加入到对象后面
+          newNode.appendTo(ChildrenList);//将子节点加入到”外壳“内
+        }
+        else{
+          newNode.appendTo(obj.next());//将子节点加入到”外壳“内
+        }
+        obj.attr('class',PrentNodeClass + ' show');//激活父节点展开状态模式
+        obj.next().css('display','');//展开子节点列表
+      }
+      // console.log(newNode);
+      with(newNode){
+        html(EditHTML(NameStr));//是不是也应该有一个点击确定和取消之后执行的方法，和编辑一样   // 这是用来显示编辑框的好像
+        //---------------------------------动态添加事件-------------------------------
+        mouseover(function(){
+        TNode_MouseOver($(this));
+        });
+        
+        mouseout(function(){
+        TNode_MouseOut($(this));
+        });
+        
+        find('.title').click(function(){
+          TModuleNodeName_Click($(this));
+        });
+        
+        find('.editArea').each(function(){
+          EditArea_Event($(this));
+        });
+        //---------------------------------------------------------------------------
+      }
+       /**
+      *这里走你的add  添加到数据库的方法。。。这个成功之后  在走 EditNode，我试试
+      * 
+      */
+     
+      $.ajax({
+            url:'ewm-xuqiu_add333',
+            type:'POST',
+            data:{
+                pid : id,         
+                name: NameStr,   // 默认名字
+                tag:tag,      // 判断是添加同级目录还是下级目录
+            },
+            dataType:'json',
+            success:function(data){
+                console.log(data);
+                if(data.code == '3'){
+                     alert('添加分类成功');
+                     // alert('data.id');
+                }
+                if(data.code == '4'){
+                     alert('添加分类失败');
+                }
+                // location.reload(true);   
+            },
+            error:function(data){
+                console.log(data);
+               // alert('添加失败');              
+            }
+        })  
+
+      EditNode(newNode.find('.title'),newNode.find('.title').html());//添加后自动切换到编辑状态
+    }
+
+  }
+  
+  //=============================== [删除]按钮 ================================
+  function DelNode(obj){
+    console.log(obj);
+    if(confirm('确定要删除吗？')){
+      var objParent = obj.parent();
+      var objChildren = obj.next('.Row');
+      var id = obj.attr('data_id');
+      // obj.remove();//基于Jquery是利用析构函数，所以“删除”后其相关属性仍然存在，除非针对ID来操作就可以彻底删除
+      // objChildren.remove();//删除对象所有子节点
+      // ChangeParent(objParent);
+      // alert(id);
+      $.ajax({
+            url:'ewm-xuqiu_delete333',
+            type:'POST',
+            data:{
+                id : id,
+            },
+            dataType:'json',
+            success:function(data){
+                // alert(111);
+                console.log(data);
+                if(data.code == '3'){
+                     alert('删除分类成功');
+                }
+                if(data.code == '4'){
+                     alert('删除分类失败');
+                }
+                if(data.code == '5'){
+                     alert('模块下操作不能空，不能删除');
+                }
+                location.reload(true);
+            },
+            error:function(data){
+                alert(222);
+                console.log(data);
+               // alert('添加失败');
+            }
+        })  
+    }
+  }
+  
+  
+  //===============================第3步 确定编辑操作  编辑[确定]按钮 ================================
+  function Edit_OK(obj){
+    var tempText = obj.has('input').children().first().val();   // 文本内容
+    var id = obj.attr('data_id');   // 编辑操作的id
+                                    // 新建目录id
+    alert(tempText);
+    alert(id);      // 这的id没有获取到
+    alert('编辑操作');
+    // if(CheckEdititon(obj,tempText)){
+    //   obj.html(tempText);
+    // }
+    // else{
+    //   obj.html(obj.attr(Orititle));  
+    // }
+    // obj.removeAttr(Orititle);
+    // obj.parent().find('.editBT').html('');
+
+    $.ajax({
+            url:'ewm-xuqiu_update333',
+            type:'POST',
+            data:{
+                name : tempText,
+                id : id,
+            },
+            dataType:'json',
+            success:function(data){
+                console.log(data);
+                if(data.code == '3'){
+                     alert('编辑成功');
+                }
+                if(data.code == '4'){
+                     alert('编辑失败');
+                }
+                location.reload(true);
+            },
+            error:function(data){
+               alert('编辑失败');
+            }
+        })  
+
+  }
+  
+  //=============================== 编辑[取消]按钮 ================================
+  function Edit_Cannel(obj){
+    obj.html(obj.attr(Orititle));
+    obj.removeAttr(Orititle);
+    obj.parent().find('.editBT').html('');
+  }
+  
+  //=============================== 改变父节点样式 ================================
+  function ChangeParent(obj){
+    if(obj.find('.ChildNode').length==0){//没有子节点
+      obj.prev('.'+PrentNodeClass).attr('class',ChildNodeClass);
+      obj.remove();
+    }
+  }
+  
+  //************************************************************************************************************
+  //************************************************************************************************************
+  //************************************************************************************************************
+  
+  //=============================== 设置聚焦并使光标设置在文字最后 ================================
+  $.fn.setCursorPosition = function(position){  
+    if(this.lengh == 0) return this;  
+    return $(this).setSelection(position, position);  
+  }  
+    
+  $.fn.setSelection = function(selectionStart, selectionEnd) {  
+    if(this.lengh == 0) return this;  
+    input = this[0];  
+    
+    if (input.createTextRange) {
+      var range = input.createTextRange();  
+      range.collapse(true); 
+      range.moveEnd('character', selectionEnd);  
+      range.moveStart('character', selectionStart);  
+      range.select(); 
+    } else if (input.setSelectionRange) {  
+      input.focus(); 
+      input.setSelectionRange(selectionStart, selectionEnd);  
+    }  
+    return this;  
+  }  
+    
+  $.fn.focusEnd = function(){
+    this.setCursorPosition(this.val().length);  
+  }
+  
+  //=========================================================================================
+  
+});
+</script>

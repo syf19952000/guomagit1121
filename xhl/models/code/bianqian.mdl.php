@@ -39,6 +39,7 @@ class Mdl_Code_Bianqian extends Mdl_Table
         return true;
     }
 	
+
     //查询 $key:字段  $val:值
     public function chaxun($key, $val)
     {
@@ -136,4 +137,26 @@ class Mdl_Code_Bianqian extends Mdl_Table
         return $arr;
     }
 
+    public function all()
+    {
+        // 我是从两个表取数据合并还是根据content表的tid取数据合并，
+        $sql = "SELECT * FROM " . $this->table($this->_table);
+        // var_dump($sql);
+        if($rs = $this->db->Execute($sql)){
+            while($row = $rs->fetch()){
+                $items[$row[$this->_pk]] = $row;
+            }
+        }
+        self::$_CACHE_TABLES[$this->_pre_cache_key] = $items;
+        $this->cache->set($this->_pre_cache_key, $items, $this->_cache_ttl);
+
+        return $items;
+    }
+
+    public function delete($key,$data)
+    {
+        $where = $key.'='.$data;
+        $sql="DELETE FROM ".$this->table($this->_table)." WHERE " .$where;
+        return $this->db->Execute($sql);
+    }
 }

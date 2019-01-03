@@ -81,7 +81,10 @@ class Mdl_Member_Account extends Model
     	}
 		$b = array('uid'=>$uid,'group_id'=>$a['group_id'],'name'=>$uname,'mobile'=>$mobile);
 		$s = array('uid'=>$uid,'group_id'=>$a['group_id'],'title'=>$cname,'contact'=>$uname,'mobile'=>$mobile,'zhixing_id'=>$zhixing_id,'zhixing_name'=>$zhixing_name);
-		$c = array('uid'=>$uid,'group_id'=>8,'title'=>$cname,'contact'=>$uname,'mobile'=>$mobile);
+		// $c = array('uid'=>$uid,'group_id'=>8,'title'=>$cname,'contact'=>$uname,'mobile'=>$mobile);
+        $c = array('uid'=>$uid,'group_id'=>$a['group_id'],'name'=>$uname,'mobile'=>$mobile);
+        // 在这判断 $a['from']，从而插入不同的表
+
         if($a['from'] == 'designer'){//初始设计师表
             K::M('designer/designer')->create($b, null, true);
         }else if($a['from'] == 'shang'){//参展商表
@@ -92,7 +95,7 @@ class Mdl_Member_Account extends Model
 					//没有传ID的情况
 				}
 			}
-        }else if($a['from'] == 'company'){//参展商表
+        }else if($a['from'] == 'company'){      //参展商表
             K::M('company/company')->create($c, true);
         }
         if(!defined('IN_ADMIN') && !$a['from_id']){

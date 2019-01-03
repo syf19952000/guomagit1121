@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>活码</title>
+    <link rel="stylesheet" href="/tpl/default/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/tpl/default/static/css/huoma.css">
+    <script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+    <script src="/tpl/default/static/js/bootstrap.js"></script>
+       <!--  以引入  LOCAL_URLL -->
+    <script src="/tpl/default/static/js/project.js"></script>      
+</head>
+<body style="background: url('/tpl/default/static/images/biaoqianma_bj.png') no-repeat center/100% 100%;height: 100vh;">
+<div class="container" style="text-align: center;">
+    <h4 class="zhuse" style="margin-top: 30px;"><{$data.title}></h4>
+    <img src="<{$code.code_link}>" alt="" style="width:40%;margin-top: 30px;">
+    <p class="zhuse" style="margin-top: 20px;"><span class="glyphicon glyphicon-star-empty" style="font-size: 30px;margin-right: 20px;vertical-align: bottom;"></span><{$data.time}></p>
+    <!-- 评论区 div形式-->
+    <p id="article_id" class="hidden"><{$code.id}></p>
+
+        <!-- <div id="contents"> -->
+        <!-- 如何进行在没有发表评论的时候，框隐藏 ，在发表评论之后，评论框显示在下面，那又进行回复的时候，评论框不重新赋值，怎么把第一条回复显示在上面-->
+        <textarea id='contents' name='contents' style="width:600px"></textarea>
+        <!-- </div> -->
+
+
+        <textarea name="content" id="comment_text" style="width:600px"></textarea>
+        <div><input type="submit" value="发表评论" id="comment_sub" /></div>
+
+    <div style="width:80%;background:url('/tpl/default/static/images/biaoqianma_center.png') no-repeat center/100% 100%;margin: 20px auto 0;padding: 30px 40px 50px;text-align: left;overflow: hidden;height:200px;">
+        <div style="height:110px;overflow: auto;">
+            <p><{$data.content}></p>
+        </div>
+    </div>
+</div>
+
+    <!-- 如何遍历树级评论表 ,评论列表显示区-->
+        <!-- 这写遍历就不显示页面 ,要进行多级遍历-->
+        <!-- 这样可以显示 -->
+        <h4 class="zhuse" style="margin-top: 30px;"><{$commentList[0].id}></h4>  
+        <h4 class="zhuse" style="margin-top: 30px;"><{$commentList.comment}></h4>
+    <{foreach $commentList as $v}>
+        <!-- <p id="" class="hidden"><{$commentList.id}></p> -->
+        <div class="comm_list">
+            <h2><{$commentList[0].id}></h2>
+            <p><{$commentList[0].comment}></p>
+            <div class="comm replay">
+              <{foreach $commentList[0]['children'] as $n}> 
+                    <div class="reply_list">
+                        <h2><{$n['id']}></h2>
+                        <p><{$n['comment']}></p>
+                        <div class="replay2_list">
+                        <{foreach $commentList[0]['children']['children'] as $s}> 
+                            <h2><{$s['id']}></h2>
+                            <p><{$s['comment']}></p>
+                        <{/foreach}>
+                </div> 
+                <{/foreach}> 
+            </div>
+        </div>
+
+    <{/foreach}>
+
+<script type="text/javascript">
+
+    // 实现发布评论之后，评论框在下侧，只在回复框显示值,显示回复框之后，点击回复，显示回复框
+    $("#comment_sub").click(function () {
+        var content = $('#comment_text').val();     // 获取到评论内容
+        var code_erid = $('#article_id').text();
+        $('#comment_text').val("");                 // 清空文本域 
+        //$('#content').append(mydate.toLocaleDateString() + "：<br>" + content + "<hr>");
+        //var url = LOCAL_URLL+'/ewm-comment.html';
+        var url = 'ewm-comment.html';
+        $.ajax({ 
+            type: "post", 
+            url: url, 
+            data:{'content' : content,'code_erid' : code_erid},
+            datatype: "json", 
+            success: function(data)
+            { 
+                // 把回复内容显示到页面，其实应该从数据库取
+                //$("#contents").html(data);
+                $("#contents").val(content);
+                alert(data);
+                // console.log(data);
+            }, 
+            error: function(data)
+            { //弹窗，告知用户写入失败 
+                alert("评论内容写入失败"); 
+            } 
+    }); 
+        
+    });
+ 
+</script>
+
+<div class="h50"></div>
+<footer>
+    <ul class="footnav">
+        <li class="nav-1 "><a href="index.html"><i></i>首页</a></li>
+        <li class="nav-2 on"><a href="ewm.html"><i></i>活码</a></li>
+        <li class="nav-3 "><a href="my.html"><i></i>我的</a></li>
+    </ul>
+</footer>
+<script src="/tpl/default/static/js/huoma.js"></script>
+
+
+<!-- <volist name="commentList" id="vo">
+         <eq name="vo.pid" value="0"><hr class="solidline"/><else/><hr class="dottedline"/></eq>
+         <p class="commentList " style="padding-left:{$vo['level']-1}cm">
+           <p><span class="user">
+           <if condition="($vo.pauthor eq NULL)">{$vo.author}
+          <else /> {$vo.author}<span class="black" style="color: #000101">回复</span>{$vo.pauthor}
+           </if>
+         </span><a class="hf" id="{$vo.id}" style="float: right">回复</a><span class="hftime">{$vo.time|date="Y-m-d",###}</span></p>
+           <p class="content">{$vo.content|reFace}</p>
+         </p>
+    </volist> -->
+
+
+
+ 
+
+
+
+</body>
+</html>

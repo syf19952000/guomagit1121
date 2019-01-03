@@ -24,8 +24,8 @@ webpackJsonp([2], [
                             data:{mobile:d},
                             method: 'GET',
                             success: function (data) {
-                                console.log(data);
-                                alert(data.message);
+                                 console.log(data);
+                                // alert(data.message);
                             }
                         })/*.then(function (t) {
                             console.log(t),

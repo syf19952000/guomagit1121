@@ -1,0 +1,95 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+<title>f</title>
+<script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+<script src="/tpl/default/static/js/bootstrap.js"></script>
+  </head> <body> <div class="comment-filed"> 
+     <!--发表评论区begin--> 
+     <div> 
+     
+     <div> 
+
+      
+      <div class="comment-filed-list" > 
+      <div><span>全部目录</span></div> 
+      <div class="comment-list" > 
+      <!--一级评论列表begin--> 
+      <ul class="comment-ul">
+        <{foreach $commlist as $data}>
+          <div > 
+              <div class="cm"> 
+                  <div class="cm-content"> <p> <{$data['name']}> </p> </div>
+                  <div class="meta"><a href="javascript:;" id="replay_id"  comment_id="<{$data.id}>" class="reply_btn" >添加模块</a></div>
+                  <!-- <div><a href="ewm-xuqiu_delete?delete_id=<{$grandson.id}>">添加模块</a></div> -->
+
+              </div> 
+          <!--二级评论begin--> 
+          <ul class="children"> 
+            <{foreach $data.children as $child}>
+              <div > 
+              <div> 
+                <div class="children-cm"> 
+                    <div  class="cm-header"> <span><{$child.name}></span> <span></span> </div> 
+                    <div><a href="ewm-xuqiu_delete?delete_id=<{$child.id}>">删除</a></div> 
+                    <div class="meta"><a href="javascript:;" id="replay_id"  comment_id="<{$child.id}>" class="reply_btn" >添加子分类</a></div>
+
+                </div> 
+           <!--三级评论begin-->
+            <ul class="children"> 
+            <{foreach $child.children as $grandson}>
+                <div >
+                   <div class="children-cm"> 
+                      <div class="cm-content"> <p><{$grandson.name}></p> </div> 
+                      <div><a href="ewm-xuqiu_delete?delete_id=<{$grandson.id}>">删除</a></div>
+                    <!-- <div class="meta"><a href="javascript:;" id="replay_id"  comment_id="<{$grandson.id}>" class="reply_btn" >添加子分类</a></div> -->
+                    <!-- <div class="meta"><a href="javascript:;" id="replay_id"  class="reply_btn" >回复</a></div> -->
+          
+                      </div> </div> 
+
+                                </li> <{/foreach}> </ul> 
+               <!--三级评论end--> </li> <{/foreach}></ul> 
+               <!--二级评论end--> </li> <{/foreach}> </ul> 
+               <!--一级评论列表end--> </div> </div> 
+               <!--评论列表显示区end--> </div> 
+</body> </html>
+
+
+
+<script type="text/javascript">
+
+$('.reply_btn').click(function () {
+        // alert(222);
+            var parent_id = $(this).attr("comment_id");                     //要回复的评论id
+            $(".reply_textarea").remove();
+            $(this).parent().append("<div class='reply_textarea'><textarea id='replay_content' rows='5' cols='100' ></textarea><br/><input type='submit' onclick='submit_button("+parent_id+")' value='添加' /></div>");   
+    })
+
+function submit_button(parent_id){
+    var b = document.getElementById('replay_content').value;
+    $.ajax({
+            url:'ewm-xuqiu_add222',
+            type:'POST',
+            data:{
+                name : b,
+                id : parent_id,
+            },
+            dataType:'json',
+            success:function(data){
+                console.log(data);
+                if(data.code == '3'){
+                     alert('添加成功');
+                }
+                if(data.code == '4'){
+                     alert('添加失败');
+                }
+                location.reload(true);
+            },
+            error:function(data){
+               alert('添加失败');
+            }
+        })  
+  }
+
+</script>

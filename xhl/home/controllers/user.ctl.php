@@ -22,17 +22,45 @@ class Ctl_User extends Ctl
         $this->tmpl = 'zhuce.html';
     }
 
+    public function zhuce222()
+    {
+        $this->tmpl = 'zhuce_company.html';
+    }
+
+    public function zhuce333()
+    {
+        $this->tmpl = 'zhuce_designer.html';
+    }
+
     public function xiugai()
     {
         $this->tmpl = 'xiugai.html';
     }
 
-    /*public function gai()
+
+    public function createdesigner()
     {
-        $data = $this->GP("gdh");
-        var_dump($data);
-        die;
-    }*/
+        echo '<pre>';
+        $data = $this->GP('gdh');
+        $session =K::M('system/session')->start();
+        $mobile = $session->get('mobile');
+        $data2 = K::M('member/member')->chaxun(mobile,$mobile);         // 查询uid
+        foreach($data2 as $v)
+        {
+            $uid = $v['uid'];
+        }
+        $datb['mail'] = $data['email'];         // designer
+        $datb['realname'] = $data['nei'];       // company
+        $result = K::M('member/member')->update222($uid,$datb,true);    // 更改邮箱
+        if($result)
+        {
+             $this->err->add("保存资料成功");
+             $forward = K::M('helper/link')->mklink('index:index', array(), array(), 'base');
+             $this->err->set_data('forward', $forward);
+        }
+    }
+
+
 
     //修改密码
     public function uppwd()
@@ -47,7 +75,7 @@ class Ctl_User extends Ctl
             $access = $this->system->config->get('access');
             $session =K::M('system/session')->start();
             $scode =  $session->get('MOBILE_VERIFY_CODE');
-            if($gdh['regCode'] = $scode){
+            if($gdh['regCode'] = $scode){                   // 在这验证手机号是否存在
                 $member = K::M('member/member')->member($gdh['mobile'], 'mobile');
                 if ($member) {
                     $succ = K::M('member/account')->update_passwd($member['uid'], $gdh['passwd']);
@@ -73,7 +101,7 @@ class Ctl_User extends Ctl
         $this->err->add('退出登录成功',200);
     }
 
-    public function login()
+    public function login()     // 登录的时候访问
     {
         if(!$gdh = $this->GP('user')){
             $this->err->add('非法的数据提交', 212);
@@ -86,7 +114,7 @@ class Ctl_User extends Ctl
             // $a = K::M('verify/check')->mail($uname) ? 'mail' : 'uname';
             $a = 'mobile';
             if($member = $this->auth->login($uname, $passwd, $a, false,$keep)){
-                $this->err->add("{$member[uname]}，欢迎您回来!");
+                $this->err->add("{$member[mobile]}，欢迎您回来!");
                 $forward = K::M('helper/link')->mklink('index:index', array(), array(), 'base');
                 // var_dump($forward);
                 // die;
@@ -271,8 +299,11 @@ class Ctl_User extends Ctl
 
 
 
-    public function create()
+    public function create()    
     {
+        echo '<pre>';
+        // $data['from']   K::M('member/account') 根据她的类型判断插入不同的表
+
         if(!$gdh = $this->GP('gdh')){
             $this->err->add('非法的数据提交', 212);
         }else if(empty($gdh['regCode'])){
@@ -280,6 +311,7 @@ class Ctl_User extends Ctl
         }else{
             $verifycode_success = true;
 			$session =K::M('system/session')->start();
+            $session->set('mobile',$gdh['mobile'], 1800);
             $scode =  $session->get('MOBILE_VERIFY_CODE');
 	        if($gdh['regCode'] != $scode){
 				$verifycode_success = false;
@@ -287,7 +319,46 @@ class Ctl_User extends Ctl
             }
             if($verifycode_success){
                 if($uid = K::M('member/account')->create($gdh)){
-                    $this->err->add('恭喜您，注册会员成功');
+                    $this->err->add('恭喜您，注册会员成功');          // 在这之前提示登录名或密码不正确
+                }
+                // 根据 $data['from'] 来跳转不同的页面，进行二次完善信息
+                // var_dump($gdh['from']);
+                if($gdh['from'] == 'company')  
+                {
+                    $forward = K::M('helper/link')->mklink('user:zhuce222', array(), array(), 'base');
+                    $this->err->set_data('forward', $forward);
+                }else if($gdh['from'] == 'designer')
+                {
+                    $forward = K::M('helper/link')->mklink('user:zhuce333', array(), array(), 'base');
+                    $this->err->set_data('forward', $forward);
+                }
+           }
+        }
+    }
+
+
+    public function create22222()    
+    {
+        echo '<pre>';
+        // 可以接受到  ["checkbox"]=> string(7) "option2"
+        var_dump($this->GP('gdh'));
+        die;
+
+        if(!$gdh = $this->GP('gdh')){
+            $this->err->add('非法的数据提交', 212);
+        }else if(empty($gdh['regCode'])){
+            $this->err->add('短信验证码不能为空', 213);
+        }else{
+            $verifycode_success = true;
+            $session =K::M('system/session')->start();
+            $scode =  $session->get('MOBILE_VERIFY_CODE');
+            if($gdh['regCode'] != $scode){
+                $verifycode_success = false;
+                $this->err->add('验证码不正确', 212);
+            }
+            if($verifycode_success){
+                if($uid = K::M('member/account')->create($gdh)){
+                    $this->err->add('恭喜您，注册会员成功');          // 在这之前提示登录名或密码不正确
 //                    $from_list = K::M('member/member')->from_list();
                     $forward = K::M('helper/link')->mklink('index:index', array(), array(), 'base');
                     $this->err->set_data('forward', $forward);
@@ -295,6 +366,7 @@ class Ctl_User extends Ctl
            }
         }
     }
+
 
     public function postforget($from='member')
     {

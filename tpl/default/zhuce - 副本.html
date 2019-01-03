@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>活码</title>
+    <link rel="stylesheet" href="/tpl/default/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/tpl/default/static/css/huoma.css">
+    <script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+    <script src="/tpl/default/static/js/bootstrap.js"></script>
+    <script src="/tpl/default/asset/js/common.js"></script>
+    <script src="/tpl/default/asset/js/reg.js"></script>
+    <style>
+        input.shuru{
+            padding-left: 20px;
+        }
+    </style>
+</head>
+<body class="login_bg">
+<div class="container">
+    <div class="login_box">
+        <p style="text-align: center;color:#fff;margin-top: 50px;font-size:16px;margin-bottom: 30px;">—————— 注册账户 ——————</p>
+        <form method="post" action="user-create">
+            <input class="shuru" type="text" id="regmobile" name="gdh[mobile]"  placeholder="请输入要注册的手机号">
+            <div style="position:relative;">
+                <input class="shuru" type="text" name="gdh[regCode]" placeholder="请输入您的验证码" style="width:55%;">
+                <p class="huoqiyanzhengma js-getReg" data-src="/user-getmsg.html">验证码</p>
+            </div>
+            <input class="shuru" type="text" name="gdh[passwd]" placeholder="请输入您要设置的密码">
+            <button class="denglu" style="margin-top: 50px;">注册</button>
+        </form>
+    </div>
+</div>
+<footer>
+    <ul class="footnav">
+        <li class="nav-1 on"><a href="index.html"><i></i>首页</a></li>
+        <li class="nav-2 "><a href="ewm.html"><i></i>活码</a></li>
+        <li class="nav-3 "><a href="my.html"><i></i>我的</a></li>
+    </ul>
+</footer>
+<script src="/tpl/default/static/js/huoma.js"></script>
+</body>
+</html>

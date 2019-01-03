@@ -22,11 +22,24 @@
         <p style="text-align: center;color:#fff;margin-top: 50px;font-size:16px;margin-bottom: 30px;">—————— 注册账户 ——————</p>
         <form method="post" action="user-create">
             <input class="shuru" type="text" id="regmobile" name="gdh[mobile]"  placeholder="请输入要注册的手机号">
-            <div style="position:relative;">
+           <!--  <div style="position:relative;">
                 <input class="shuru" type="text" name="gdh[regCode]" placeholder="请输入您的验证码" style="width:55%;">
                 <p class="huoqiyanzhengma js-getReg" data-src="/user-getmsg.html">验证码</p>
-            </div>
+            </div> -->
             <input class="shuru" type="text" name="gdh[passwd]" placeholder="请输入您要设置的密码">
+
+        <!-- 复选框 首先为技术需求方，然后是技术提供者，技术提供者又分个人和公司。，可以进去首页之后，单独的有注册公司功能-->
+          <div class="form-group">
+            <label class="checkbox-inline">
+              <input type="checkbox" name="gdh[from]" value="company">我要雇人办事
+              <!-- <input type="checkbox" name="gdh[checkbox]" value="option1">我要雇人办事 -->
+            </label>
+            <label class="checkbox-inline">
+              <input type="checkbox" name="gdh[from]" value="designer">我要入驻赚钱（又分个人和公司）
+            </label>
+          </div>
+
+
             <button class="denglu" style="margin-top: 50px;">注册</button>
         </form>
     </div>

@@ -1,0 +1,52 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html;charset=UTF-8"> 
+<title>php无限级分类实战————评论及回复功能</title>
+<link rel="stylesheet" type="text/css" href="/Public/css/comment.css">
+ <script type="text/javascript" src="/Public/js/jquery-1.11.3.min.js" >
+</script> <script type="text/javascript" src="/Public/js/comment.js" >
+ </script> </head> <body> <div class="comment-filed"> 
+     <!--发表评论区begin--> 
+     <div> 
+     
+     <div> 
+
+      <!--发表评论区end--> <!--评论列表显示区begin--> <!-- {$commentlist} --> 
+      <div class="comment-filed-list" > 
+      <div><span>全部评论</span></div> 
+      <div class="comment-list" > 
+      <!--一级评论列表begin--> 
+      <ul class="comment-ul">
+       <!-- <volist name="commlist" id="data">  -->
+        <{foreach $commlist as $data}>
+          
+          <div > 
+            
+              <div class="cm"> 
+                  <div class="cm-content"> <p> <{$data['name']}> </p> </div>
+              </div> 
+          <!--二级评论begin--> 
+          <ul class="children"> 
+            <{foreach $data.children as $child}>
+          <!-- <volist name="data.children" id="child" > -->
+              <div > 
+              <div> 
+                <div class="children-cm"> 
+                    <div  class="cm-header"> <span><{$child.name}></span> <span></span> </div> 
+                </div> 
+           <!--三级评论begin-->
+            <ul class="children"> 
+            <{foreach $child.children as $grandson}>
+            <!-- <volist name="child.children" id="grandson" >  -->
+           
+                <div >
+                   <div class="children-cm"> 
+                      <div class="cm-content"> <p><{$grandson.name}></p> </div> 
+                      </div> </div> 
+
+                                </li> <{/foreach}> </ul> 
+               <!--三级评论end--> </li> <{/foreach}></ul> 
+               <!--二级评论end--> </li> <{/foreach}> </ul> 
+               <!--一级评论列表end--> </div> </div> 
+               <!--评论列表显示区end--> </div> </body> </html>

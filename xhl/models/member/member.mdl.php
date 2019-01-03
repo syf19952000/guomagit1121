@@ -175,14 +175,7 @@ class Mdl_Member_Member extends Mdl_Table
         return $uid;
     }
 
-    public function update($pk, $data, $checked=false)
-    {
-        unset($data['uname']);
-        if(!$checked && !($data = $this->_check($data,  $pk))){
-            return false;
-        }
-        return $this->db->update($this->_table, $data, $this->field($this->_pk, $pk));
-    }
+    
 
     public function delete($val, $force=false)
     {
@@ -326,5 +319,39 @@ class Mdl_Member_Member extends Mdl_Table
 
         return $items;
     }
+
+
+    public function create222($data, $checked=false)
+    {
+        if(!$checked && !($data = $this->_check($data))){
+            return false;
+        }
+        // $data['regip'] = $data['regip'] ? $data['regip'] : __IP;
+        // $data['dateline'] = $data['dateline'] ? $data['dateline'] :  __CFG::TIME;
+        if($uid = $this->db->insert($this->_table, $data, true)){
+            $this->db->Execute('$uid');
+        }
+        return $uid;
+    }
     
+    public function update($pk, $data, $checked=false)
+    {
+        unset($data['uname']);
+        if(!$checked && !($data = $this->_check($data,  $pk))){
+            return false;
+        }
+        return $this->db->update($this->_table, $data, $this->field($this->_pk, $pk));
+    }
+
+    public function update222($pk, $data, $checked=false)
+    {
+        $this->_checkpk();
+        if(!$checked && !$data = $this->_check_schema($data,  $pk)){
+            return false;
+        }
+        if($this->db->update($this->_table, $data, $this->field($this->_pk, $pk))){
+            $this->flush();
+        }
+        return true;
+    }
 }

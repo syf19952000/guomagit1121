@@ -21,10 +21,10 @@ class CTL extends Factory
 		$this->system->objctl = &$this;
 		$this->admin = &$this->system->admin;
 
-		if (!$this->check_priv()) {
-			$this->err->add("您没有权限操作", -1);
-			$this->err->response();
-		}
+		// if (!$this->check_priv()) {
+		// 	$this->err->add("您没有权限操作", -1);		// 在这，html页面调 控制器方法提示  没有权限操作，注释掉就可以
+		// 	$this->err->response();
+		// }
 	}
 
 	protected function _init_pagedata()

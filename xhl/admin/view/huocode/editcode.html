@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>活码</title>
+    <link rel="stylesheet" href="/tpl/default/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/tpl/default/static/css/huoma.css">
+    <script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+    <script src="/tpl/default/static/js/bootstrap.js"></script>
+
+</head>
+<body>
+<div class="container bj">
+    <h4 style="margin:20px 0;" class="title">标签码</h4>
+    <h5 style="font-size: 18px;" class="title">2/3</h5>
+    <form method="POST" action="?huocode/ewmadmin-editcode" enctype="multipart/form-data">
+    <div class="box" style="padding:20px 25px;">
+        <input type="hidden" name="data[tid]" value="<{$data.tid}>">
+        <p>活码标题:</p>
+        <input type="text" name="data[title]" class="huoma_title" value="<{$data.title}>" placeholder="请输入活码标题">
+        <p>上传图片:</p>
+        <div class="huoma_photo">
+            <input id="biaoqianma_file" name="img" type="file" style="width:80px;height:80px;position: absolute;top: 10px;opacity: 0;">
+            <!-- <img src="/tpl/default/static/images/hm.png" alt="" style="height:80px;margin-top: 10px;border-radius: 5px;vertical-align: top;"> -->
+            <img src="<{$data.img}>" alt="" style="height:80px;margin-top: 10px;border-radius: 5px;vertical-align: top;">
+            <div class="huoma_photo_box">
+            </div>
+        </div>
+        <p>记录回忆:</p>
+        <textarea name="data[content]"  class="huoma_neirong" placeholder="请填写您要记录的故事"><{$data.content}></textarea>
+    </div>
+    <!-- <a href="ewm_information.html" class="next">下一步</a> -->
+    <button class="next">保存</button>
+    </form>
+</div>
+
+<button style="display: none;" type="button" class="btn btn-primary" data-toggle="modal" data-target=".fade">Large modal</button>
+<div class="modal fade" tabindex="-1" style="top:20%;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="gridSystemModalLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-4">.col-md-4</div>
+                    <div class="col-md-4 col-md-offset-4">.col-md-4 .col-md-offset-4</div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="h50"></div>
+<footer>
+    <ul class="footnav">
+        <li class="nav-1 "><a href="index.html"><i></i>首页</a></li>
+        <li class="nav-2 on"><a href="ewm.html"><i></i>活码</a></li>
+        <li class="nav-3 "><a href="my.html"><i></i>我的</a></li>
+    </ul>
+</footer>
+<script src="/tpl/default/static/js/huoma.js"></script>
+</body>
+</html>

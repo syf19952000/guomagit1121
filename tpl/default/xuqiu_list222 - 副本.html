@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <title>活码</title>
+    <link rel="stylesheet" href="/tpl/default/static/css/bootstrap.css">
+    <link rel="stylesheet" href="/tpl/default/static/css/huoma.css">
+    <script src="/tpl/default/static/js/jquery-2.2.3.min.js"></script>
+    <script src="/tpl/default/static/js/bootstrap.js"></script>
+    <!-- 应该是一些栏目清单 一张需求表，来实现增删改查-->
+</head>
+<body>
+
+<!-- <section class="rt_wrap content mCustomScrollbar">
+ <div class="rt_content">
+      <div class="page_title">
+       <h2 class="fl">分类列表</h2>
+      </div>
+      <section class="mtb">
+      </section>
+      <{foreach $alist as $v}>
+      <table class="table">
+       <tr>
+        <th>模块名<{$v.name}></th>  
+       </tr>
+       <tr>
+        <td class="center">操作名<{$v.name}></td>
+       </tr>
+    <{/foreach}>  
+      </table>
+ </div>
+</section> -->
+
+
+ <table class="table">
+       <tr>
+        <th>ID</th>
+        <th>分类名称</th>
+        <th>path</th>
+        <th>删除</th>
+       </tr>
+    <{foreach $alist as $v}>
+       <tr>
+        <td class="center"><{$v.id}></td>
+        <!-- <td class="center"><img src="upload/user_002.png" width="50" height="50"/></td> -->
+        <!-- 重复符号 -->
+        <td><{str_repeat("|__",$v['count']-2)}><{$v.name}></td>
+        <!-- <td class="center">|----<{$v.name}></td> -->
+        <td class="center"><{$v.path}></td>
+        <td class="center"><a href="ewm-xuqiu_delete?delete_id=<{$v.id}>" title="删除" class="link_icon">删除</a></td>
+       </tr>
+    <{/foreach}>  
+      </table>
+
+
+
+  
+
+
+
+
+
+
+
+
+</body>
+</html>
+<script type="text/javascript">
+
+function diag()
+{
+    // var str=prompt("添加分类名称","比如我叫啥");
+    var str=prompt("添加分类名称","");
+    console.log(str);
+    // if(str)
+    // {
+    //     alert("您刚输入的是："+ str)
+    // }
+     $.ajax({
+            url:'admin_add.html', // 走不到后台为啥
+            type:'POST',
+            data:{
+               "fenlei": str
+            },
+            dataType:'json',
+            success:function(data){
+                alert(111);
+         
+                
+            },
+            error:function(msg){
+                // alert(msg);
+                console.log(msg);
+            }
+        })  
+}
+
+</script>

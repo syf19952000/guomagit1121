@@ -32,7 +32,7 @@ class Ctl_Weixin_Weixin extends Ctl
     {
         $weixin = K::M('weixin/weixin')->admin();
         if($data = $this->checksubmit('data')){
-            if($attach = $_FILES['weixin_face']){
+            if($attach = $_FILES['weixin_face']){   // $_FILES 获取上传文件
                if($attach['error'] == UPLOAD_ERR_OK){
                     if($a = K::M('magic/upload')->upload($attach, 'weixin')){
                         $data['face'] = $a['photo'];

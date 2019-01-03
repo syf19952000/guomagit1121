@@ -16,9 +16,47 @@ class Ctl_Index extends Ctl
 
     public function index()
     {
-        $this->tmpl = 'admin:page/index.html';
+        $this->tmpl = 'admin:huocode/login.html';
         $this->output();
     }
+
+    public function aa()
+    {
+        $this->tmpl = 'admin:huocode/index.html';
+    }
+
+
+    public function login()
+    {
+        $access = $this->system->config->get('access');
+        if($_POST['admin_name']){
+            if(!$name = $this->GP('admin_name')){
+                $this->err->add('登录名不能为空',401);
+            }else if(!$passwd = $this->GP('admin_pwd')){
+                $this->err->add('登录密码不能为空',402);
+            }else{
+                $verifycode_success = true;
+                $access = $this->system->config->get('access');
+                if($verifycode_success){
+                    if($this->system->admin->login($name,$passwd)){
+                        // header("Location:?index.html");
+                        // header("Location:?index-aa.html");  // 显示 huocode/index.html页面，调用的index中的aa方法
+                        header("Location:?huocode/ewmadmin-index.html");
+                        exit();
+                    }
+                }
+            }
+            //$this->err->show("?index-login.html");
+        }else{
+            $this->pagedata['admin'] = $access['verifycode']['admin'];
+            $this->tmpl = 'admin:huoma/login.html';
+            $this->output();
+        }
+    }
+
+
+
+
 
     public function welcome()
     {
@@ -56,48 +94,7 @@ class Ctl_Index extends Ctl
         $this->tmpl = 'admin:page/welcome.html';
     }
 
-    public function login()
-    {
-      
-		$access = $this->system->config->get('access');
-        if($_POST['admin_name']){
-            if(!$name = $this->GP('admin_name')){
-                $this->err->add('登录名不能为空',401);
-            }else if(!$passwd = $this->GP('admin_pwd')){
-                $this->err->add('登录密码不能为空',402);
-            }else{
-                $verifycode_success = true;
-                $access = $this->system->config->get('access');
-                /*if($access['verifycode']['admin']){
-                    if(!$code = $this->GP('verify_code')){
-                         $verifycode_success = false;
-                        $this->err->add('验证码不能为空',403);
-                    }else if(!K::M('magic/verify')->check($code)){
-                        $verifycode_success = false;
-                        $this->err->add('验证码不正确',403);
-                    }
-                    if(!$verify_code = $this->GP('verify_code')){
-                        $verifycode_success = false;
-                        $this->err->add('验证码不正确', 212);
-                    }else if(!K::M('magic/verify')->check($verify_code)){
-                        $verifycode_success = false;
-                        $this->err->add('验证码不正确', 212);
-                    }
-                }*/
-                if($verifycode_success){
-                    if($this->system->admin->login($name,$passwd)){
-                        header("Location:?index.html");
-                        exit();
-                    }
-                }
-            }
-            $this->err->show("?index-login.html");
-        }else{
-            $this->pagedata['admin'] = $access['verifycode']['admin'];
-            $this->tmpl = 'admin:page/login.html';
-            $this->output();
-        }
-    }
+    
 
     public function loginout()
     {
